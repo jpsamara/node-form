@@ -1,0 +1,68 @@
+---
+
+###################################################################################################
+#### Step 1: Local
+###################################################################################################
+- name: Build new version of docker image and send it to Google Cloud docker private registry
+
+  hosts: localhost
+  connection: local
+  vars:
+    image_version: "{{ version }}"
+    gcloud_project: "parabolic-byte-206919"
+
+  tasks:
+
+  - name: Build docker image
+    shell: docker build -t gcr.io/{{ gcloud_project }}/nodejs-form:{{ image_version }} ..
+    register: t1
+  - debug: var=t1.stdout_lines
+
+  - name: Push new docker image to gcloud private registry
+    shell: docker push gcr.io/{{ gcloud_project }}/nodejs-form:{{ image_version }}
+    register: t2
+  - debug: var=t2.stdout_lines
+
+  - name: Check if image has been created locally
+    shell: docker images
+    register: t3
+  - debug: var=t3.stdout_lines
+
+###################################################################################################
+#### Step 2: Google Cloud Deployment
+####         note => docker-credential-gcr configure-docker
+###################################################################################################
+- name: Deployment to gcloud compute engine
+
+  hosts: gcloud-nodejs
+  vars:
+    image_version: "{{ version }}"
+    gcloud_project: "parabolic-byte-206919"
+
+  tasks:
+
+  - name: Pull new docker image
+    shell: docker pull gcr.io/{{ gcloud_project }}/nodejs-form:{{ image_version }}
+    register: t4
+  - debug: var=t4.stdout_lines
+
+  - name: Stop current container
+    shell: docker stop nodejs-form && docker rm nodejs-form
+    ignore_errors: yes
+    register: t5
+  - debug: var=t5.stdout_lines
+
+  - name: Start new version of the container
+    shell: docker run -d -p 80:4000 --name nodejs-form gcr.io/{{ gcloud_project }}/nodejs-form:{{ image_version }}
+    register: t6
+  - debug: var=t6.stdout_lines
+
+  - name: Check if new container is running
+    shell: docker ps
+    register: t7
+  - debug: var=t7.stdout_lines
+
+  - name: Check if the app is working with a curl on the api
+    shell: sleep 5 && curl localhost/api/exist/test
+    register: t8
+  - debug: var=t8.stdout_lines

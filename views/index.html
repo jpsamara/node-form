@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>My Preference</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-9 offset-md-3">
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <a class="btn btn-outline-secondary mb-5" href="/preferences">See all preferences</a>
+              {% if submit and result %}
+                {% if result == 'done' %}
+                  <div class="alert alert-success"><strong>{{ name }}</strong>, thank you for submitting your preferences.</div>
+                {% else %}
+                  <div class="alert alert-danger">User <strong>{{ name }}</strong> has already been submitted.</div>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+          
+          <form class="" action="/add/preference" method="post">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <h1>Your preferences</h1>
+                <hr>
+                <label for="fullname">Name</label>
+                <input type="text" class="form-control" id="fullname" 
+                       name="fullname" placeholder="" value="" required="">
+              </div>
+            </div> <!-- End Row -->
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="color">Favorite color</label>
+                <input type="text" class="form-control" id="color" 
+                       name="color" placeholder="" value="" required="">
+              </div>
+            </div> <!-- End Row -->
+            
+            <div class="row">
+              <div class="col-md-5 mb-5">
+                <label for="animal">Cat or Dog ?</label>
+                <select class="custom-select d-block w-100" id="animal"
+                        name="animal" required="">
+                  <option value="cat">Cat</option>
+                  <option value="dog">Dog</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Send my preferences</button>
+            
+          </form>
+        </div>
+      </div>
+      
+    </div>
+  </body>
+</html>

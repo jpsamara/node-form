@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>List of Preferences</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-9">
+          <h1>List of Preferences</h1>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fullname</th>
+                <th scope="col">Color</th>
+                <th scope="col">Animal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for preference in preferences %}
+                <tr>
+                  <th scope="row">{{ preference.id }}</th>
+                  <td>{{ preference.fullname }}</td>
+                  <td>{{ preference.color }}</td>
+                  <td>{{ preference.animal }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div class="float-right">
+            <a class="btn btn-outline-danger mt-3" href="/preferences/clear">Clear all preferences</a>
+            <a class="btn btn-outline-info mt-3" href="/">Add your preference</a>
+          </div>
+        </div>
+        
+      </div> <!-- End row -->
+      
+    </div> <!-- End container -->
+  </body>
+</html>
